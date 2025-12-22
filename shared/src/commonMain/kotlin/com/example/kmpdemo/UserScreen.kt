@@ -11,6 +11,7 @@ import com.example.kmpdemo.model.User
 @Composable
 fun UserScreen(viewModel: UserViewModel) {
     val users by viewModel.users.collectAsState()
+    val platform = getPlatform()
 
     // Load users when screen enters composition
     LaunchedEffect(Unit) {
@@ -19,7 +20,7 @@ fun UserScreen(viewModel: UserViewModel) {
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Users") })
+            TopAppBar(title = { Text("Run in ${platform.name}") })
         }
     ) { padding ->
         LazyColumn(

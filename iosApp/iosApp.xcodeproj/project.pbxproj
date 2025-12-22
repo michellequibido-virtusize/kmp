@@ -7,18 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D7555EA92EF839390014EC81 /* shared.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7555EA72EF839360014EC81 /* shared.xcframework */; };
-		D7555EAA2EF839390014EC81 /* shared.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D7555EA72EF839360014EC81 /* shared.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D75CC40E2EF90162002B8978 /* shared.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D75CC40C2EF9015F002B8978 /* shared.xcframework */; };
+		D75CC40F2EF90162002B8978 /* shared.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D75CC40C2EF9015F002B8978 /* shared.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		D7555EAB2EF839390014EC81 /* Embed Frameworks */ = {
+		D75CC4102EF90162002B8978 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				D7555EAA2EF839390014EC81 /* shared.xcframework in Embed Frameworks */,
+				D75CC40F2EF90162002B8978 /* shared.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -27,7 +27,7 @@
 
 /* Begin PBXFileReference section */
 		BC811FA1ACCC3109EEE05E7E /* KMPDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KMPDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D7555EA72EF839360014EC81 /* shared.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = shared.xcframework; sourceTree = "<group>"; };
+		D75CC40C2EF9015F002B8978 /* shared.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = shared.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -61,7 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D7555EA92EF839390014EC81 /* shared.xcframework in Frameworks */,
+				D75CC40E2EF90162002B8978 /* shared.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,7 +89,7 @@
 		D74233952EF7F5E000D803AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D7555EA72EF839360014EC81 /* shared.xcframework */,
+				D75CC40C2EF9015F002B8978 /* shared.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -105,7 +105,7 @@
 				119B31DDB068797218373619 /* Sources */,
 				E893EABB5F0C8A01684FD623 /* Frameworks */,
 				8468B37AC13E5D45407A33FB /* Resources */,
-				D7555EAB2EF839390014EC81 /* Embed Frameworks */,
+				D75CC4102EF90162002B8978 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

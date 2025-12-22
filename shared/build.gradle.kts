@@ -7,14 +7,15 @@ plugins {
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
+    `maven-publish`
 }
+group = "com.example.kmp.shared"
+version = "1.0.0"
 
 kotlin {
 
-     androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
+    androidTarget {
+        publishLibraryVariants("release", "debug") // ✅ make release/debug variants visible for Gradle
     }
 
     iosX64()
@@ -41,7 +42,7 @@ kotlin {
         ios.deploymentTarget = "16.0"
 
         framework {
-            baseName = "Shared"
+            baseName = "shared"
             isStatic = true   // <-- static framework for iOS
         }
     }
@@ -84,6 +85,4 @@ android {
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
     }
-
-
 }
