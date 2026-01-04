@@ -1,33 +1,31 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
-    alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.kotlinCocoapods)
-    alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.kotlinSerialization)
-    `maven-publish`
+    id("com.android.library")
+    kotlin("multiplatform")
+    id("org.jetbrains.compose")
+    id("org.jetbrains.kotlin.native.cocoapods")
+    id("maven-publish")
+    kotlin("plugin.serialization") version "1.9.24"
+
 }
-group = "com.example.kmp.shared"
+
+group = "com.example.kmpdemo.shared"
 version = "1.0.0"
 
 kotlin {
+    androidTarget() // modern replacement for deprecated android()
 
-    androidTarget {
-        publishLibraryVariants("release", "debug") // ✅ make release/debug variants visible for Gradle
-    }
+    jvmToolchain(17)
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-// Aggregate XCFramework for all iOS targets
+    // --- iOS targets ---
+    val iosX64 = iosX64()
+    val iosArm64 = iosArm64()
+    val iosSimulatorArm64 = iosSimulatorArm64()
+
+    // XCFramework (optional)
     val iosXCFramework = XCFramework()
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { target ->
+    listOf(iosX64, iosArm64, iosSimulatorArm64).forEach { target ->
         target.binaries.framework {
             baseName = "shared"
             binaryOption("bundleId", "com.example.kmpdemo.shared")
@@ -35,54 +33,139 @@ kotlin {
             iosXCFramework.add(this)
         }
     }
+
     cocoapods {
-        version = "1.0.0"                // <-- Pod version
-        summary = "Shared module for iOS"
+        version = "1.0.0"
+        summary = "Shared UI module"
         homepage = "https://example.com"
         ios.deploymentTarget = "16.0"
 
         framework {
             baseName = "shared"
-            isStatic = true   // <-- static framework for iOS
+            isStatic = true
         }
     }
 
     sourceSets {
-        commonMain.dependencies {
-            // put your Multiplatform dependencies here
-            implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.serialization.kotlinx.json)
-            implementation(libs.coroutines.core)
-            implementation(libs.serialization.json)
+        val commonMain by getting {
+            dependencies {
+                // ✅ Compose Multiplatform (THIS is what you asked for)
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material)
 
-            implementation(libs.compose.runtime)
-            implementation(libs.compose.ui)
-            implementation(libs.compose.foundation)
-            implementation(libs.compose.material)
-        }
-        androidMain.dependencies {
-            implementation(libs.ktor.client.okhttp)
-        }
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+                implementation("io.ktor:ktor-client-core:2.3.12")
+                implementation("io.ktor:ktor-client-content-negotiation:2.3.12")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.12")
+
+                implementation("io.ktor:ktor-client-logging:2.3.12")
+
+                implementation("media.kamel:kamel-image:0.9.4")
+
+            }
         }
 
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
+        val androidMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-okhttp:2.3.5")
+
+
+                implementation(platform("androidx.compose:compose-bom:2024.09.00"))
+                implementation("androidx.compose.ui:ui")
+                implementation("androidx.compose.material:material")
+                implementation("androidx.compose.ui:ui-tooling-preview")
+                implementation("androidx.activity:activity-compose:1.9.2")
+                implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+                implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+                implementation("androidx.compose.ui:ui-tooling:1.5.3")
+            }
+        }
+
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+
+        val iosMain by creating {
+            dependsOn(commonMain)
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+            dependencies {
+                implementation("io.ktor:ktor-client-darwin:2.3.5")
+            }
+        }
+
+
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
+
+
+        val androidUnitTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
+
+        val androidInstrumentedTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
+
+
+        val iosTest by creating {
+            dependsOn(commonTest)
         }
     }
-
 }
 
 android {
     namespace = "com.example.kmpdemo.shared"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
+    compileSdk = 34
+
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk = 21
+        // targetSdk removed here (deprecated)
+    }
+
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
+
+    compileOptions {
+        // Align Java to 17
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+plugins.withId("maven-publish") {
+    afterEvaluate {
+        publishing {
+            repositories {
+                mavenLocal()
+            }
+
+            publications {
+                create<MavenPublication>("androidRelease") {
+                    groupId = "com.example.kmpdemo.shared"
+                    artifactId = "shared-android"
+                    version = "1.0.0"
+
+                    // Explicitly use the android artifact
+                    artifact("$buildDir/outputs/aar/shared-release.aar") {
+                        builtBy(tasks.named("assembleRelease"))
+                    }
+                }
+            }
+        }
     }
 }

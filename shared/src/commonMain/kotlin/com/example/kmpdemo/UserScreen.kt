@@ -5,8 +5,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.kmpdemo.model.User
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 
 @Composable
 fun UserScreen(viewModel: UserViewModel) {
@@ -37,12 +40,30 @@ fun UserScreen(viewModel: UserViewModel) {
 
 @Composable
 fun UserItem(user: User) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        Text(text = user.name, style = MaterialTheme.typography.h6)
-        Text(text = user.email ?: "", style = MaterialTheme.typography.body2)
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            KamelImage(
+                resource = asyncPainterResource(data = user.profile_image),
+                contentDescription = "Network Image",
+                modifier = Modifier.size(70.dp)
+            )
+            Text(text = user.display_name,
+                style = MaterialTheme.typography.h6,
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Button(
+                onClick = {
+                    openWebView(user.link)
+                }
+            ) {
+                Text("View Profile")
+            }
+        }
+        Divider()
     }
+
 }

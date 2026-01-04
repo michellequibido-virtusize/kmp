@@ -17,6 +17,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
+        androidContext = this
+
         setContent {
             MaterialTheme {
                 UserScreen(viewModel)
