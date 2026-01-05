@@ -1,39 +1,57 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# Kotlin Multiplatform (KMP) User App
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+This project is a **Kotlin Multiplatform Mobile (KMM/KMP) application** that demonstrates a shared user interface and network logic between Android and iOS. The app fetches a list of StackOverflow users via the StackExchange API and supports web content display through a WebView.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## Features
 
-* [/shared](./shared/src) is for the code that will be shared between all targets in the project.
-  The most important subfolder is [commonMain](./shared/src/commonMain/kotlin). If preferred, you
-  can add code to the platform-specific folders here too.
+- **Shared User Interface**: Built entirely with Compose for both platforms.  
+- **User List Screen**: Displays a list of users retrieved from the StackExchange API.  
+- **WebView Handler**: Opens user-related web content when needed.  
+- **Networking**: Implemented with [Ktor](https://ktor.io/) client.  
+- **Serialization**: JSON conversion using Kotlinx Serialization.  
+- **Image Loading**: Network images loaded via [Kamel](https://github.com/alialbaali/Kamel).  
+- **ViewModel**: Shared `UserViewModel` to manage UI state and networking.  
 
-### Build and Run Android Application
+## Project Structure
+<img width="657" height="337" alt="Screenshot 2026-01-05 at 11 38 24 AM" src="https://github.com/user-attachments/assets/5c0c8a19-5e38-48c8-9b37-43b45f8532f1" />
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+### Key Shared Components
 
-### Build and Run iOS Application
+- **APIService and NetworkClient**: Handles API requests via Ktor.
+  ```kotlin
+   client.get("https://api.stackexchange.com/2.3/users?site=stackoverflow&page=1&pagesize=20").body()
+- **UserScreen**: Compose-based screen displaying the list of users with network-loaded images.
 
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+- **WebViewHandler**: Cross-platform WebView implementation for showing user pages.
 
----
+- **UserViewModel**: Maintains UI state, handles API requests, and exposes data to UserScreen.
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+### Dependencies
+
+- **Ktor** – for network requests
+
+- **Kotlinx Serialization** – for JSON parsing
+
+- **Kamel** – for loading images from the network
+
+- **Jetpack Compose / Compose Multiplatform** – for building UI
+
+- **Kotlinx Coroutines** – for asynchronous operations
+
+### Getting Started
+
+- Clone the repository:
+
+   git clone https://github.com/michellequibido-virtusize/kmp.git
+  
+- Open the project in Android Studio / IntelliJ IDEA with KMM support.
+  
+- Sync Gradle to fetch dependencies.
+  
+- Run this command to create the xcframework for iOS
+
+  **./gradlew :shared:assembleXCFramework**
+  
+- Add the shared.xcframework to iOSApp -> Frameworks
+
+- Run the Android or iOS app target. The shared UserScreen and WebViewHandler will work across both platforms.
