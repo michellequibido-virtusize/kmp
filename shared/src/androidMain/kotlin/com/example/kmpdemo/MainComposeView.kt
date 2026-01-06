@@ -4,9 +4,6 @@ import android.content.Context
 import android.widget.FrameLayout
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.findViewTreeLifecycleOwner
-import androidx.lifecycle.findViewTreeViewModelStoreOwner
 
 class MainComposeView @JvmOverloads constructor(
     context: Context
@@ -26,24 +23,5 @@ class MainComposeView @JvmOverloads constructor(
                 LayoutParams.MATCH_PARENT
             )
         )
-    }
-
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-
-        val lifecycleOwner = findViewTreeLifecycleOwner()
-            ?: error("LifecycleOwner missing")
-
-        val viewModelStoreOwner =
-            findViewTreeViewModelStoreOwner()
-                ?: error("ViewModelStoreOwner not found")
-
-        val viewModel = ViewModelProvider(
-            viewModelStoreOwner
-        ).get(UserViewModel::class.java)
-
-        composeView.setContent {
-            UserScreen(viewModel)
-        }
     }
 }

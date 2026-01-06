@@ -50,9 +50,9 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 // ✅ Compose Multiplatform (THIS is what you asked for)
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material)
+//                implementation(compose.runtime)
+//                implementation(compose.foundation)
+//                implementation(compose.material)
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
                 implementation("io.ktor:ktor-client-core:2.3.12")
@@ -71,14 +71,15 @@ kotlin {
                 implementation("io.ktor:ktor-client-okhttp:2.3.5")
 
 
-                implementation(platform("androidx.compose:compose-bom:2024.09.00"))
-                implementation("androidx.compose.ui:ui")
-                implementation("androidx.compose.material:material")
-                implementation("androidx.compose.ui:ui-tooling-preview")
-                implementation("androidx.activity:activity-compose:1.9.2")
-                implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
-                implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-                implementation("androidx.compose.ui:ui-tooling:1.5.3")
+                // ✅ EXPOSE Compose to Flutter app
+                api(platform("androidx.compose:compose-bom:2024.09.00"))
+                api("androidx.compose.ui:ui")
+                api("androidx.compose.material:material")
+                api("androidx.compose.ui:ui-tooling-preview")
+                api("androidx.activity:activity-compose:1.9.2")
+
+                api("androidx.lifecycle:lifecycle-runtime-ktx:2.8.6")
+                api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
             }
         }
 
@@ -92,6 +93,9 @@ kotlin {
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
             dependencies {
+//                api(compose.runtime)
+//                api(compose.foundation)
+//                api(compose.material)
                 implementation("io.ktor:ktor-client-darwin:2.3.5")
             }
         }

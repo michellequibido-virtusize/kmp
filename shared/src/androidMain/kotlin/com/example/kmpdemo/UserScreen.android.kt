@@ -5,7 +5,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.kmpdemo.model.User
 import io.kamel.image.KamelImage
@@ -54,7 +53,7 @@ fun UserItem(user: User) {
             Text(text = user.display_name,
                 style = MaterialTheme.typography.h6,
             )
-            Spacer(modifier = Modifier.weight(1f))
+//            Spacer(modifier = Modifier.width(1f))
             Button(
                 onClick = {
                     openWebView(user.link)

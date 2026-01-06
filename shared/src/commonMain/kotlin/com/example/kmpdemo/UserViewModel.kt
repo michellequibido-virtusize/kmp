@@ -1,6 +1,5 @@
 package com.example.kmpdemo
 
-import androidx.lifecycle.ViewModel
 import com.example.kmpdemo.model.User
 import com.example.kmpdemo.network.APIService
 import com.example.kmpdemo.network.provideHttpClient
@@ -12,7 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class UserViewModel: ViewModel() {
+class UserViewModel {
     private val apiService: APIService = APIService(provideHttpClient())
 
     private val _users = MutableStateFlow<List<User>>(emptyList())
